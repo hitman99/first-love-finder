@@ -47,7 +47,3 @@ workflows:
     jobs:
       - build_deps
       - build_image
-          requires: build_deps
-
-
-
