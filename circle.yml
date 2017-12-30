@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build deps:
+  build_deps:
     docker:
       # specify the version you desire here
       - image: circleci/node:9.0
@@ -28,7 +28,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-  build image:
+  build_image:
     docker:
       - image: docker:17.05.0-ce-git
     working_directory: ~/repo
@@ -40,6 +40,14 @@ jobs:
     - run:
         name: Push image to registry
         command: docker push tadomavicius/first-love-finder:latest
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build_deps
+      - build_image
+          requires: build_deps
 
 
 
