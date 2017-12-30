@@ -20,20 +20,10 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: npm install
-
       - setup_remote_docker
-      - run:
-          name: Build docker image
-          command: docker build . -t tadomavicius/first-love-finder:latest
-      - run:
-          name: Push image to registry
-          command: docker push tadomavicius/first-love-finder:latest
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+      - run
+          name: Trigger Docker Hub Build
+          command: curl -H "Content-Type: application/json" --data '{"build": true}' -X POST $DOCKER_HUB_TRIGGER
 
 
 workflows:
