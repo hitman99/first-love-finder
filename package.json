@@ -1,0 +1,28 @@
+{
+  "name": "first-love-finder",
+  "version": "1.0.0",
+  "description": "First Love Finder",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hitman99/first-love-finder.git"
+  },
+  "keywords": [
+    "YT",
+    "First",
+    "Love"
+  ],
+  "author": "admin@hitman.lt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hitman99/first-love-finder/issues"
+  },
+  "homepage": "https://github.com/hitman99/first-love-finder#readme",
+  "dependencies": {
+    "jsdom": "^11.5.1",
+    "winston": "^2.4.0"
+  }
+}
