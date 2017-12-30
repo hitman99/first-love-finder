@@ -23,11 +23,11 @@ jobs:
       - run: npm install
 
       - run:
-        name: Build docker image
-        command: docker build . -t tadomavicius/first-love-finder:latest
+          name: Build docker image
+          command: docker build . -t tadomavicius/first-love-finder:latest
       - run:
-        name: Push image to registry
-        command: docker push tadomavicius/first-love-finder:latest
+          name: Push image to registry
+          command: docker push tadomavicius/first-love-finder:latest
 
       - save_cache:
           paths:
