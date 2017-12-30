@@ -7,7 +7,7 @@ jobs:
   build_deps:
     docker:
       # specify the version you desire here
-      - image: circleci/node:9.0
+      - image: circleci/node:9.2
     working_directory: ~/repo
 
     steps:
@@ -46,6 +46,6 @@ workflows:
   build-and-deploy:
     jobs:
       - build_deps
-      - build_image
+      - build_image:
           requires:
             - build_deps
