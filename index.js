@@ -42,7 +42,7 @@ const check = () => {
             res => {
                 let msg = res.available ? 'found!' : 'better luck next day';
                 logger.info(`Finding First Love... ${msg}`);
-                if (!res.available) {
+                if (res.available) {
                     send_sms(SENDER, RECEIVER, AUTH, API_URL);
                 }
             }
