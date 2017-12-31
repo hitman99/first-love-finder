@@ -23,6 +23,7 @@
   "homepage": "https://github.com/hitman99/first-love-finder#readme",
   "dependencies": {
     "jsdom": "^11.5.1",
+    "request": "^2.83.0",
     "winston": "^2.4.0"
   }
 }

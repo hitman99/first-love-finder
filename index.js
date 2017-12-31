@@ -1,7 +1,13 @@
 const { Logger, transports } = require('winston');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
+const request = require('request');
+const { API_URL, SENDER, RECEIVER, AUTH } = process.env;
+const bikeURL = 'https://www.yt-industries.com/en/detail/index/sArticle/236';
+
+
 const failLimit = 10;
+let counter = 0;
 
 const logger = new Logger({
     level: 'info',
@@ -12,7 +18,7 @@ const logger = new Logger({
 
 const find_it = () => {
     return new Promise((resolve, reject) => {
-        JSDOM.fromURL('https://www.yt-industries.com/en/detail/index/sArticle/236')
+        JSDOM.fromURL(bikeURL)
             .then(
                 dom => {
                     let soldOutButton = dom.window.document.querySelector('button#nobasketButton.noaddButton.new-buttons');
@@ -30,14 +36,15 @@ const find_it = () => {
     })
 };
 
-let counter = 0;
-
 const check = () => {
     find_it()
         .then(
             res => {
                 let msg = res.available ? 'found!' : 'better luck next day';
                 logger.info(`Finding First Love... ${msg}`);
+                if (res.available) {
+                    send_sms(SENDER, RECEIVER, AUTH, API_URL);
+                }
             }
         )
         .catch(
@@ -52,6 +59,31 @@ const check = () => {
                 }
             }
         )
+};
+
+const send_sms = (sender, receiver, auth, api_url) => {
+
+    let options = {
+        url: api_url,
+        headers: {
+            'Authorization': auth
+        },
+        method: 'POST',
+        json: {
+            from: sender,
+            to: receiver,
+            text: `First Love is available! Order now: ${bikeURL}`
+        }
+    };
+
+    request(options, (err, res, body)=>{
+        if (!err && res.statusCode == 200) {
+            logger.info(`SMS sent to ${receiver}`);
+        }
+        else {
+            logger.error(`Cannot send sms message: ${JSON.stringify(body)}`);
+        }
+    });
 };
 
 check();
