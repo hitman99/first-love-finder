@@ -2,7 +2,7 @@ const { Logger, transports } = require('winston');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const request = require('request');
-const { API_URL, SENDER, RECEIVER, AUTH } = process.env;
+const { API_URL, SENDER, RECEIVER, AUTH, SMS_ANYWAY } = process.env;
 const bikeURL = 'https://www.yt-industries.com/en/detail/index/sArticle/236';
 
 
@@ -43,7 +43,10 @@ const check = () => {
                 let msg = res.available ? 'found!' : 'better luck next day';
                 logger.info(`Finding First Love... ${msg}`);
                 if (res.available) {
-                    send_sms(SENDER, RECEIVER, AUTH, API_URL);
+                    send_sms(SENDER, RECEIVER, AUTH, API_URL, `First Love is available! Order now: ${bikeURL}`);
+                }
+                if (SMS_ANYWAY) {
+                    send_sms(SENDER, RECEIVER, AUTH, API_URL, 'Sorry, First Love is not yet available :(');
                 }
             }
         )
@@ -61,7 +64,7 @@ const check = () => {
         )
 };
 
-const send_sms = (sender, receiver, auth, api_url) => {
+const send_sms = (sender, receiver, auth, api_url, text) => {
     if (sender && receiver && auth && api_url) {
         let options = {
             url: api_url,
@@ -72,7 +75,7 @@ const send_sms = (sender, receiver, auth, api_url) => {
             json: {
                 from: sender,
                 to: receiver,
-                text: `First Love is available! Order now: ${bikeURL}`
+                text
             }
         };
 
