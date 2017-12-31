@@ -42,7 +42,7 @@ const check = () => {
             res => {
                 let msg = res.available ? 'found!' : 'better luck next day';
                 logger.info(`Finding First Love... ${msg}`);
-                if (res.available) {
+                if (!res.available) {
                     send_sms(SENDER, RECEIVER, AUTH, API_URL);
                 }
             }
@@ -62,28 +62,32 @@ const check = () => {
 };
 
 const send_sms = (sender, receiver, auth, api_url) => {
+    if (sender && receiver && auth && api_url) {
+        let options = {
+            url: api_url,
+            headers: {
+                'Authorization': auth
+            },
+            method: 'POST',
+            json: {
+                from: sender,
+                to: receiver,
+                text: `First Love is available! Order now: ${bikeURL}`
+            }
+        };
 
-    let options = {
-        url: api_url,
-        headers: {
-            'Authorization': auth
-        },
-        method: 'POST',
-        json: {
-            from: sender,
-            to: receiver,
-            text: `First Love is available! Order now: ${bikeURL}`
-        }
-    };
-
-    request(options, (err, res, body)=>{
-        if (!err && res.statusCode == 200) {
-            logger.info(`SMS sent to ${receiver}`);
-        }
-        else {
-            logger.error(`Cannot send sms message: ${JSON.stringify(body)}`);
-        }
-    });
+        request(options, (err, res, body) => {
+            if (!err && res.statusCode == 200) {
+                logger.info(`SMS sent to ${receiver}`);
+            }
+            else {
+                logger.error(`Cannot send sms message: ${JSON.stringify(body)}`);
+            }
+        });
+    }
+    else {
+        logger.error('SMS sending failed - environment is not configured')
+    }
 };
 
 check();
