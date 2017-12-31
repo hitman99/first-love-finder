@@ -16,5 +16,6 @@ If you want to get an sms message when the bike is found, the following env vari
 * `SENDER` - sender
 * `RECEIVER` - your MSISDN (phone number)
 * `AUTH` - HTTP `Authorization` header value to be used for HTTP POST to the `API_URL`
+* `SMS_ANYWAY` - if set, will send an sms on every run regardless with appropriate texts
 
 SMS sending will only be attempted if all the env variables are populated.
